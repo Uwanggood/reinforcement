@@ -1,4 +1,5 @@
 from agent import RandomAgent
+from grid_world.environment import Environment
 from grid_world_enum import Action
 
 
@@ -13,8 +14,7 @@ def get_pos(at: Action):
         case Action.RIGHT:
             return 0, 1
 
-
-class GridWorld:
+class GridWorld(Environment):
     def __init__(self):
         self.done = False
         self.size = 5
