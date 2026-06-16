@@ -1,3 +1,29 @@
 /untitled.iml
 /Y
 /Y.pub
+
+# JetBrains IDE files
+.idea/
+*.iml
+
+# Python cache and tooling
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Local environment files
+.env
+.env.*

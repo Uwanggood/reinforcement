@@ -1,6 +1,11 @@
-from agent import RandomAgent
-from grid_world.environment import Environment
-from grid_world_enum import Action
+if __package__:
+    from grid_world.environment import Environment
+    from grid_world.grid_world_enum import Action
+    from grid_world.random_agent import RandomAgent
+else:
+    from environment import Environment
+    from grid_world_enum import Action
+    from random_agent import RandomAgent
 
 
 def get_pos(at: Action):
@@ -14,6 +19,7 @@ def get_pos(at: Action):
         case Action.RIGHT:
             return 0, 1
 
+
 class GridWorld(Environment):
     def __init__(self):
         self.done = False
@@ -24,6 +30,7 @@ class GridWorld(Environment):
 
     def reset(self):
         self.state = self.start
+        self.done = False
         return self.state
 
     def step(self, at: Action):
@@ -47,19 +54,28 @@ class GridWorld(Environment):
         return self.state, c_r, self.done
 
 
-max_step = 500
-env = GridWorld()
-agent = RandomAgent(max_step=500)
+def run_episode(env: Environment, agent: RandomAgent, max_steps: int = 100) -> tuple[tuple, float, bool, int]:
+    if max_steps < 1:
+        raise ValueError("max_steps must be at least 1")
 
-t_r = 0.0
-state = None
-done = False
+    state = env.reset()
+    total_reward = 0.0
 
-while agent.iterable:
-    action = agent.choose_action()
-    state, c_r, done = env.step(at=action)
-    t_r += c_r
-    if done:
-        break
+    for step in range(1, max_steps + 1):
+        action = agent.choose_action()
+        state, reward, done = env.step(at=action)
+        total_reward += reward
 
-print(f"state : {state}, t_r: {t_r} done: {done} step: {agent.current_step}")
+        if done:
+            return state, total_reward, done, step
+
+    return state, total_reward, False, max_steps
+
+
+if __name__ == "__main__":
+    env = GridWorld()
+    agent = RandomAgent()
+
+    state, total_reward, done, step = run_episode(env=env, agent=agent, max_steps=500)
+
+    print(f"state : {state}, total_reward: {total_reward} done: {done} step: {step}")
