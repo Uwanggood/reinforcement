@@ -1,11 +1,10 @@
+from grid_world.agent import QAgent
+from grid_world.enum import Action
+
 if __package__:
     from grid_world.environment import Environment
-    from grid_world.grid_world_enum import Action
-    from grid_world.random_agent import RandomAgent
 else:
     from environment import Environment
-    from grid_world_enum import Action
-    from random_agent import RandomAgent
 
 
 def get_pos(at: Action):
@@ -54,7 +53,7 @@ class GridWorld(Environment):
         return self.state, c_r, self.done
 
 
-def run_episode(env: Environment, agent: RandomAgent, max_steps: int = 100) -> tuple[tuple, float, bool, int]:
+def run_episode(env: Environment, agent: QAgent, max_steps: int = 100) -> tuple[tuple, float, bool, int]:
     if max_steps < 1:
         raise ValueError("max_steps must be at least 1")
 
@@ -74,7 +73,7 @@ def run_episode(env: Environment, agent: RandomAgent, max_steps: int = 100) -> t
 
 if __name__ == "__main__":
     env = GridWorld()
-    agent = RandomAgent()
+    agent = QAgent(env.size)
 
     state, total_reward, done, step = run_episode(env=env, agent=agent, max_steps=500)
 
